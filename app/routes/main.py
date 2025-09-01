@@ -1,6 +1,6 @@
 from flask import Flask, render_template, Blueprint, session, redirect, url_for
 
-from app.models.product import Product
+from app.models.facility import Product
 
 main_bp = Blueprint('main', __name__)
 

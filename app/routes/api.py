@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, session
-from app.models.product import Product
-from app.models.order import Order
-from app.models.orderitem import OrderItem
-from app.models.delivery import Delivery
-from app.models.user import User
+from app.models.facility import Product
+from app.models.equipment import Order
+from app.models.service import OrderItem
+from app.models.project import Delivery
+from app.models.program import User
 from app import db  
 from datetime import datetime
 

@@ -1,6 +1,6 @@
 from app import create_app, db
-from app.models.user import User 
-from app.models.product import Product
+from app.models.program import User 
+from app.models.facility import Product
 from werkzeug.security import generate_password_hash
 
 def create_users_and_products():
