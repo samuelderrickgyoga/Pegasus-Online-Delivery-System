@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone Project Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-project-diagram text-white text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Capstone Project Dashboard</h1>
+            <p class="text-gray-600">Overview of Programs, Facilities, Services, Equipment, Projects, Participants, and Outcomes</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg rounded-xl border border-gray-100 p-4 mb-8">
+            <div class="flex justify-between items-center">
+                <span class="text-blue-600 font-medium">Dashboard</span>
+                <div class="flex space-x-4">
+                    <a href="{{ url_for('main.programs') }}" class="text-blue-600 hover:text-blue-500 font-medium transition duration-200">
+                        <i class="fas fa-list mr-2"></i>Programs
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Programs Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-folder-open text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Programs</h3>
+                        <p id="programs-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="programs-list" class="text-sm text-gray-600">
+                    <!-- Recent programs will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Facilities Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <i class="fas fa-building text-green-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Facilities</h3>
+                        <p id="facilities-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="facilities-list" class="text-sm text-gray-600">
+                    <!-- Recent facilities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Services Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-purple-100 rounded-lg">
+                        <i class="fas fa-tools text-purple-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Services</h3>
+                        <p id="services-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="services-list" class="text-sm text-gray-600">
+                    <!-- Recent services will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Equipment Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <i class="fas fa-cogs text-yellow-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Equipment</h3>
+                        <p id="equipment-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="equipment-list" class="text-sm text-gray-600">
+                    <!-- Recent equipment will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Projects Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-red-100 rounded-lg">
+                        <i class="fas fa-tasks text-red-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Projects</h3>
+                        <p id="projects-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="projects-list" class="text-sm text-gray-600">
+                    <!-- Recent projects will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Participants Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-indigo-100 rounded-lg">
+                        <i class="fas fa-users text-indigo-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Participants</h3>
+                        <p id="participants-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="participants-list" class="text-sm text-gray-600">
+                    <!-- Recent participants will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Outcomes Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-teal-100 rounded-lg">
+                        <i class="fas fa-chart-line text-teal-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Outcomes</h3>
+                        <p id="outcomes-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="outcomes-list" class="text-sm text-gray-600">
+                    <!-- Recent outcomes will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="text-center mt-8">
+            <p class="text-xs text-gray-500">
+                <i class="fas fa-shield-alt mr-1"></i>
+                Capstone Project Dashboard - Month 1 Deliverables
+            </p>
+        </div>
+    </div>
+
+    <script>
+        async function loadDashboardData() {
+            const endpoints = [
+                { name: 'programs', url: '/api/programs/', countId: 'programs-count', listId: 'programs-list' },
+                { name: 'facilities', url: '/api/facilities/', countId: 'facilities-count', listId: 'facilities-list' },
+                { name: 'services', url: '/api/services/', countId: 'services-count', listId: 'services-list' },
+                { name: 'equipment', url: '/api/equipment/', countId: 'equipment-count', listId: 'equipment-list' },
+                { name: 'projects', url: '/api/projects/', countId: 'projects-count', listId: 'projects-list' },
+                { name: 'participants', url: '/api/participants/', countId: 'participants-count', listId: 'participants-list' },
+                { name: 'outcomes', url: '/api/outcomes/', countId: 'outcomes-count', listId: 'outcomes-list' }
+            ];
+
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint.url);
+                    const data = await response.json();
+                    const countElement = document.getElementById(endpoint.countId);
+                    const listElement = document.getElementById(endpoint.listId);
+
+                    countElement.textContent = `${data.length} total`;
+
+                    // Show first 3 items
+                    const recentItems = data.slice(0, 3);
+                    listElement.innerHTML = recentItems.map(item => `<div>• ${item.name || item.full_name || item.description || 'Item'}</div>`).join('');
+                } catch (error) {
+                    console.error(`Error loading ${endpoint.name}:`, error);
+                    document.getElementById(endpoint.countId).textContent = 'Error loading';
+                    document.getElementById(endpoint.listId).innerHTML = '<div class="text-red-500">Failed to load</div>';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>
