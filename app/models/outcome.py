@@ -16,5 +16,17 @@ class Outcome(db.Model):
     # Relationships
     project = db.relationship("Project", back_populates="outcomes")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'title': self.title,
+            'description': self.description,
+            'artifact_link': self.artifact_link,
+            'outcome_type': self.outcome_type,
+            'quality_certification': self.quality_certification,
+            'commercialization_status': self.commercialization_status
+        }
+
     def __repr__(self):
         return f"<Outcome {self.title}>"

@@ -8,60 +8,394 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
+    <!-- Mobile Menu Button -->
+    <button onclick="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md">
+        <i class="fas fa-bars text-gray-600"></i>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex flex-col">
-        <div class="flex items-center mb-10">
-            <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
-                <i class="fas fa-project-diagram text-white text-xl"></i>
+    <aside id="sidebar" class="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-40 w-64 bg-white shadow-lg border-r border-gray-100 p-4 lg:p-6 flex flex-col h-full">
+        <div class="flex items-center mb-6 lg:mb-10">
+            <div class="h-10 lg:h-12 w-10 lg:w-12 bg-blue-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-project-diagram text-white text-lg lg:text-xl"></i>
             </div>
-            <span class="ml-3 font-bold text-xl text-gray-900">Dashboard</span>
+            <span class="ml-3 font-bold text-lg lg:text-xl text-gray-900">Dashboard</span>
         </div>
-        <nav class="flex flex-col space-y-4">
-            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+        <nav class="flex flex-col space-y-2 lg:space-y-4">
+            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-home mr-3"></i> Home
             </a>
-            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-list mr-3"></i> Programs
             </a>
-            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-building mr-3"></i> Facilities
             </a>
-            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-blue-600 font-semibold">
+            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-blue-600 font-semibold p-2 rounded bg-blue-50 text-sm lg:text-base">
                 <i class="fas fa-tools mr-3"></i> Equipment
             </a>
-            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-cogs mr-3"></i> Projects
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.participants') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-users mr-3"></i> Participants
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-chart-line mr-3"></i> Outcomes
+            </a>
+            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
+                <i class="fas fa-wrench mr-3"></i> Services
             </a>
         </nav>
     </aside>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
     <!-- Main Content -->
-    <main class="flex-1 p-8 overflow-y-auto">
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Equipment</h1>
-            <p class="text-gray-600">Manage equipment inventory</p>
+        <div class="mb-6 lg:mb-8">
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Equipment</h1>
+            <p class="text-sm lg:text-base text-gray-600">Manage and view all equipment inventory</p>
         </div>
-        <!-- Equipment Content -->
+        
+        <!-- Create Equipment Form -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+            <div class="flex items-center mb-4">
+                <div class="p-3 bg-blue-100 rounded-lg">
+                    <i class="fas fa-plus text-blue-600 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Add New Equipment</h3>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="facility_id" class="block text-sm font-medium text-gray-700">Facility *</label>
+                        <select id="facility_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <option value="">Select Facility</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Equipment Name *</label>
+                        <input type="text" id="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="usage_domain" class="block text-sm font-medium text-gray-700">Usage Domain *</label>
+                        <select id="usage_domain" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <option value="">Select Domain</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="IoT">IoT</option>
+                            <option value="Software">Software</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="inventory_code" class="block text-sm font-medium text-gray-700">Inventory Code</label>
+                        <input type="text" id="inventory_code" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="support_phase" class="block text-sm font-medium text-gray-700">Support Phase</label>
+                        <select id="support_phase" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Phase</option>
+                            <option value="Training">Training</option>
+                            <option value="Prototyping">Prototyping</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Production">Production</option>
+                            <option value="Research">Research</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="capabilities" class="block text-sm font-medium text-gray-700">Capabilities</label>
+                        <input type="text" id="capabilities" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., High precision, Multi-axis">
+                    </div>
+                </div>
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows="3"></textarea>
+                </div>
+                <button id="create-equipment" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add Equipment</button>
+            </div>
+        </div>
+        
+        <!-- Search and Filter Section -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+            <div class="flex items-center mb-4">
+                <div class="p-3 bg-green-100 rounded-lg">
+                    <i class="fas fa-search text-green-600 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Search & Filter Equipment</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" id="search-name" placeholder="Search by name..." class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <select id="filter-domain" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">All Domains</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="IoT">IoT</option>
+                    <option value="Software">Software</option>
+                    <option value="Testing">Testing</option>
+                    <option value="Manufacturing">Manufacturing</option>
+                </select>
+                <select id="filter-facility" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">All Facilities</option>
+                </select>
+                <button id="apply-filters" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Apply Filters</button>
+            </div>
+        </div>
+        
+        <!-- Equipment List -->
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
             <div class="flex items-center mb-4">
                 <div class="p-3 bg-blue-100 rounded-lg">
                     <i class="fas fa-tools text-blue-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Equipment List</h3>
-                    <p class="text-gray-500">Total Equipment: 0</p>
+                    <h3 class="text-lg font-semibold text-gray-900">Equipment Inventory</h3>
+                    <p id="equipment-count" class="text-gray-500">Loading...</p>
                 </div>
             </div>
-            <div class="text-sm text-gray-600">
-                <p>No equipment available.</p>
+            <div id="equipment-list" class="text-sm text-gray-600">
+                <div class="grid gap-4" id="equipment-items"></div>
             </div>
         </div>
     </main>
+    
+    <script>
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('translate-x-0')) {
+                // Close menu
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                // Open menu
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        let facilities = [];
+        
+        // Fetch facilities for dropdowns
+        async function fetchFacilities() {
+            try {
+                const response = await fetch('/api/facilities/');
+                facilities = await response.json();
+                
+                // Populate facility dropdowns
+                const facilitySelects = [document.getElementById('facility_id'), document.getElementById('filter-facility')];
+                facilitySelects.forEach(select => {
+                    if (select.id === 'filter-facility') {
+                        select.innerHTML = '<option value="">All Facilities</option>';
+                    } else {
+                        select.innerHTML = '<option value="">Select Facility</option>';
+                    }
+                    facilities.forEach(facility => {
+                        const option = document.createElement('option');
+                        option.value = facility.id;
+                        option.textContent = facility.name;
+                        select.appendChild(option);
+                    });
+                });
+            } catch (error) {
+                console.error('Error fetching facilities:', error);
+            }
+        }
+        
+        // Fetch all equipment
+        async function fetchEquipment(filters = {}) {
+            try {
+                let url = '/api/equipment/';
+                if (Object.keys(filters).length > 0) {
+                    const params = new URLSearchParams(filters);
+                    url += '?' + params.toString();
+                }
+                
+                const response = await fetch(url);
+                const equipment = await response.json();
+                const equipmentList = document.getElementById('equipment-items');
+                const equipmentCount = document.getElementById('equipment-count');
+                
+                if (response.ok) {
+                    equipmentCount.textContent = `Total Equipment: ${equipment.length}`;
+                    equipmentList.innerHTML = '';
+                    equipment.forEach(item => {
+                        const facility = facilities.find(f => f.id === item.facility_id);
+                        const card = document.createElement('div');
+                        card.className = 'border rounded-lg p-4 bg-gray-50';
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-semibold text-gray-900">${item.name}</h4>
+                                <div class="flex space-x-1">
+                                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">${item.usage_domain}</span>
+                                    ${item.support_phase ? `<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${item.support_phase}</span>` : ''}
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">${item.description || 'No description'}</p>
+                            <div class="text-xs text-gray-500 mb-2">
+                                <p><i class="fas fa-building mr-1"></i><strong>Facility:</strong> ${facility ? facility.name : 'Unknown'}</p>
+                                ${item.inventory_code ? `<p><i class="fas fa-barcode mr-1"></i><strong>Code:</strong> ${item.inventory_code}</p>` : ''}
+                                ${item.capabilities ? `<p><i class="fas fa-cogs mr-1"></i><strong>Capabilities:</strong> ${item.capabilities}</p>` : ''}
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button onclick="editEquipment(${item.id})" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteEquipment(${item.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        equipmentList.appendChild(card);
+                    });
+                } else {
+                    equipmentCount.textContent = 'Error loading equipment';
+                    equipmentList.innerHTML = `<p class="text-red-500">${equipment.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('equipment-count').textContent = 'Error loading equipment';
+                document.getElementById('equipment-items').innerHTML = `<p class="text-red-500">Failed to load equipment: ${error.message}</p>`;
+            }
+        }
+
+        // Create new equipment
+        document.getElementById('create-equipment').addEventListener('click', async () => {
+            const equipmentData = {
+                facility_id: parseInt(document.getElementById('facility_id').value),
+                name: document.getElementById('name').value,
+                usage_domain: document.getElementById('usage_domain').value,
+                inventory_code: document.getElementById('inventory_code').value,
+                support_phase: document.getElementById('support_phase').value,
+                capabilities: document.getElementById('capabilities').value,
+                description: document.getElementById('description').value
+            };
+
+            if (!equipmentData.facility_id || !equipmentData.name || !equipmentData.usage_domain) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/equipment/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(equipmentData)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Equipment added successfully!');
+                    fetchEquipment();
+                    // Clear form
+                    document.getElementById('facility_id').value = '';
+                    document.getElementById('name').value = '';
+                    document.getElementById('usage_domain').value = '';
+                    document.getElementById('inventory_code').value = '';
+                    document.getElementById('support_phase').value = '';
+                    document.getElementById('capabilities').value = '';
+                    document.getElementById('description').value = '';
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to create equipment: ${error.message}`);
+            }
+        });
+
+        // Apply filters
+        document.getElementById('apply-filters').addEventListener('click', () => {
+            const filters = {};
+            const name = document.getElementById('search-name').value;
+            const domain = document.getElementById('filter-domain').value;
+            const facilityId = document.getElementById('filter-facility').value;
+            
+            if (name) filters.name = name;
+            if (domain) filters.usage_domain = domain;
+            if (facilityId) filters.facility_id = facilityId;
+            
+            fetchEquipment(filters);
+        });
+
+        // Edit equipment
+        async function editEquipment(equipmentId) {
+            try {
+                const response = await fetch(`/api/equipment/${equipmentId}`);
+                const equipment = await response.json();
+                
+                if (response.ok) {
+                    const newData = {
+                        name: prompt('Enter equipment name:', equipment.name),
+                        description: prompt('Enter description:', equipment.description || ''),
+                        capabilities: prompt('Enter capabilities:', equipment.capabilities || ''),
+                        inventory_code: prompt('Enter inventory code:', equipment.inventory_code || ''),
+                    };
+
+                    // Remove null/undefined fields
+                    Object.keys(newData).forEach(key => {
+                        if (!newData[key]) delete newData[key];
+                    });
+
+                    if (Object.keys(newData).length > 0) {
+                        const updateResponse = await fetch(`/api/equipment/${equipmentId}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(newData)
+                        });
+                        const result = await updateResponse.json();
+                        if (updateResponse.ok) {
+                            alert('Equipment updated successfully!');
+                            fetchEquipment();
+                        } else {
+                            alert(`Error: ${result.error}`);
+                        }
+                    }
+                } else {
+                    alert(`Error fetching equipment: ${equipment.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to update equipment: ${error.message}`);
+            }
+        }
+
+        // Delete equipment
+        async function deleteEquipment(equipmentId) {
+            if (confirm('Are you sure you want to delete this equipment? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`/api/equipment/${equipmentId}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        alert('Equipment deleted successfully!');
+                        fetchEquipment();
+                    } else {
+                        const result = await response.json();
+                        alert(`Error: ${result.error}`);
+                    }
+                } catch (error) {
+                    alert(`Failed to delete equipment: ${error.message}`);
+                }
+            }
+        }
+
+        // Initial fetch
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchFacilities();
+            await fetchEquipment();
+        });
+    </script>
 </body>
 </html>

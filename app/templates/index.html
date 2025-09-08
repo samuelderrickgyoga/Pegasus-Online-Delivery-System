@@ -7,9 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 lg:flex">
+    <!-- Mobile Menu Button -->
+    <div class="lg:hidden bg-white shadow-sm border-b border-gray-100 p-4">
+        <button id="mobile-menu-btn" class="text-gray-600 hover:text-blue-600">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </div>
+    
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex flex-col">
+    <aside id="sidebar" class="hidden lg:flex w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex-col fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto"
         <div class="flex items-center mb-10">
             <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
                 <i class="fas fa-project-diagram text-white text-xl"></i>
@@ -32,110 +39,117 @@
             <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-cogs mr-3"></i> Projects
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.participants') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-users mr-3"></i> Participants
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-chart-line mr-3"></i> Outcomes
+            </a>
+            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+                <i class="fas fa-wrench mr-3"></i> Services
             </a>
         </nav>
     </aside>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
+    
     <!-- Main Content -->
-    <main class="flex-1 p-8 overflow-y-auto">
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Capstone Project Dashboard</h1>
-            <p class="text-gray-600">Overview of Programs, Facilities, Equipment, Projects, Participants, and Outcomes</p>
+        <div class="mb-6 lg:mb-8">
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Capstone Project Dashboard</h1>
+            <p class="text-sm lg:text-base text-gray-600">Overview of Programs, Facilities, Equipment, Projects, Participants, and Outcomes</p>
         </div>
         <!-- Dashboard Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
             <!-- Programs Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-folder-open text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-folder-open text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Programs</h3>
-                        <p id="programs-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Programs</h3>
+                        <p id="programs-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="programs-list" class="text-sm text-gray-600">
+                <div id="programs-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Program details to be loaded.</p>
                 </div>
             </div>
             <!-- Facilities Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-building text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-building text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Facilities</h3>
-                        <p id="facilities-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Facilities</h3>
+                        <p id="facilities-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="facilities-list" class="text-sm text-gray-600">
+                <div id="facilities-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Facility details to be loaded.</p>
                 </div>
             </div>
             <!-- Equipment Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-tools text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-tools text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Equipment</h3>
-                        <p id="equipment-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Equipment</h3>
+                        <p id="equipment-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="equipment-list" class="text-sm text-gray-600">
+                <div id="equipment-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Equipment details to be loaded.</p>
                 </div>
             </div>
             <!-- Projects Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-cogs text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-cogs text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Projects</h3>
-                        <p id="projects-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Projects</h3>
+                        <p id="projects-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="projects-list" class="text-sm text-gray-600">
+                <div id="projects-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Project details to be loaded.</p>
                 </div>
             </div>
             <!-- Participants Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-users text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-users text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Participants</h3>
-                        <p id="participants-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Participants</h3>
+                        <p id="participants-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="participants-list" class="text-sm text-gray-600">
+                <div id="participants-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Participant details to be loaded.</p>
                 </div>
             </div>
             <!-- Outcomes Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 bg-blue-100 rounded-lg">
-                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+            <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-3 lg:mb-4">
+                    <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-chart-line text-blue-600 text-lg lg:text-xl"></i>
                     </div>
-                    <div class="ml-4">
-                        <h3 class="text-lg font-semibold text-gray-900">Outcomes</h3>
-                        <p id="outcomes-count" class="text-gray-500">Loading...</p>
+                    <div class="ml-3 lg:ml-4">
+                        <h3 class="text-base lg:text-lg font-semibold text-gray-900">Outcomes</h3>
+                        <p id="outcomes-count" class="text-sm text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="outcomes-list" class="text-sm text-gray-600">
+                <div id="outcomes-list" class="text-xs lg:text-sm text-gray-600">
                     <p>Outcome details to be loaded.</p>
                 </div>
             </div>
@@ -144,18 +158,38 @@
 </body>
 
 <script>
+// Mobile menu functionality
+function toggleMobileMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-overlay');
+    
+    sidebar.classList.toggle('hidden');
+    overlay.classList.toggle('hidden');
+}
+
+document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+
 document.addEventListener("DOMContentLoaded", async () => {
+    // Load all entity data in parallel
+    await Promise.all([
+        loadPrograms(),
+        loadFacilities(),
+        loadEquipment(),
+        loadProjects(),
+        loadParticipants(),
+        loadOutcomes()
+    ]);
+});
+
+// Load Programs
+async function loadPrograms() {
     try {
-        // Fetch programs from Flask API
         const response = await fetch("/api/programs/");
         if (!response.ok) throw new Error("Failed to fetch programs");
 
         const programs = await response.json();
-
-        // Update count
         document.getElementById("programs-count").textContent = `${programs.length} Programs`;
 
-        // Update list
         const listContainer = document.getElementById("programs-list");
         listContainer.innerHTML = "";
 
@@ -163,12 +197,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             const ul = document.createElement("ul");
             ul.classList.add("space-y-1");
 
-            programs.forEach(prog => {
+            programs.slice(0, 3).forEach(prog => {
                 const li = document.createElement("li");
-                li.textContent = prog.name; // assuming your Program model has "name"
+                li.textContent = prog.name;
                 li.classList.add("text-gray-700", "font-medium");
                 ul.appendChild(li);
             });
+
+            if (programs.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${programs.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
 
             listContainer.appendChild(ul);
         } else {
@@ -179,7 +220,212 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("programs-count").textContent = "Error";
         document.getElementById("programs-list").innerHTML = "<p class='text-red-500'>Failed to load programs.</p>";
     }
-});
+}
+
+// Load Facilities
+async function loadFacilities() {
+    try {
+        const response = await fetch("/api/facilities/");
+        if (!response.ok) throw new Error("Failed to fetch facilities");
+
+        const facilities = await response.json();
+        document.getElementById("facilities-count").textContent = `${facilities.length} Facilities`;
+
+        const listContainer = document.getElementById("facilities-list");
+        listContainer.innerHTML = "";
+
+        if (facilities.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            facilities.slice(0, 3).forEach(facility => {
+                const li = document.createElement("li");
+                li.textContent = facility.name;
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            if (facilities.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${facilities.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No facilities available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading facilities:", error);
+        document.getElementById("facilities-count").textContent = "Error";
+        document.getElementById("facilities-list").innerHTML = "<p class='text-red-500'>Failed to load facilities.</p>";
+    }
+}
+
+// Load Equipment
+async function loadEquipment() {
+    try {
+        const response = await fetch("/api/equipment/");
+        if (!response.ok) throw new Error("Failed to fetch equipment");
+
+        const equipment = await response.json();
+        document.getElementById("equipment-count").textContent = `${equipment.length} Equipment`;
+
+        const listContainer = document.getElementById("equipment-list");
+        listContainer.innerHTML = "";
+
+        if (equipment.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            equipment.slice(0, 3).forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = item.name;
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            if (equipment.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${equipment.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No equipment available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading equipment:", error);
+        document.getElementById("equipment-count").textContent = "Error";
+        document.getElementById("equipment-list").innerHTML = "<p class='text-red-500'>Failed to load equipment.</p>";
+    }
+}
+
+// Load Projects
+async function loadProjects() {
+    try {
+        const response = await fetch("/api/projects/");
+        if (!response.ok) throw new Error("Failed to fetch projects");
+
+        const projects = await response.json();
+        document.getElementById("projects-count").textContent = `${projects.length} Projects`;
+
+        const listContainer = document.getElementById("projects-list");
+        listContainer.innerHTML = "";
+
+        if (projects.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            projects.slice(0, 3).forEach(project => {
+                const li = document.createElement("li");
+                li.textContent = project.title;
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            if (projects.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${projects.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No projects available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading projects:", error);
+        document.getElementById("projects-count").textContent = "Error";
+        document.getElementById("projects-list").innerHTML = "<p class='text-red-500'>Failed to load projects.</p>";
+    }
+}
+
+// Load Participants
+async function loadParticipants() {
+    try {
+        const response = await fetch("/api/participants/");
+        if (!response.ok) throw new Error("Failed to fetch participants");
+
+        const participants = await response.json();
+        document.getElementById("participants-count").textContent = `${participants.length} Participants`;
+
+        const listContainer = document.getElementById("participants-list");
+        listContainer.innerHTML = "";
+
+        if (participants.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            participants.slice(0, 3).forEach(participant => {
+                const li = document.createElement("li");
+                li.textContent = participant.full_name;
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            if (participants.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${participants.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No participants available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading participants:", error);
+        document.getElementById("participants-count").textContent = "Error";
+        document.getElementById("participants-list").innerHTML = "<p class='text-red-500'>Failed to load participants.</p>";
+    }
+}
+
+// Load Outcomes
+async function loadOutcomes() {
+    try {
+        const response = await fetch("/api/outcomes/");
+        if (!response.ok) throw new Error("Failed to fetch outcomes");
+
+        const outcomes = await response.json();
+        document.getElementById("outcomes-count").textContent = `${outcomes.length} Outcomes`;
+
+        const listContainer = document.getElementById("outcomes-list");
+        listContainer.innerHTML = "";
+
+        if (outcomes.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            outcomes.slice(0, 3).forEach(outcome => {
+                const li = document.createElement("li");
+                li.textContent = outcome.title;
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            if (outcomes.length > 3) {
+                const moreItem = document.createElement("li");
+                moreItem.textContent = `...and ${outcomes.length - 3} more`;
+                moreItem.classList.add("text-gray-500", "text-sm");
+                ul.appendChild(moreItem);
+            }
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No outcomes available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading outcomes:", error);
+        document.getElementById("outcomes-count").textContent = "Error";
+        document.getElementById("outcomes-list").innerHTML = "<p class='text-red-500'>Failed to load outcomes.</p>";
+    }
+}
 </script>
 
 

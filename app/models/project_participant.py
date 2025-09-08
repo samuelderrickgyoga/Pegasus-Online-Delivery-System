@@ -13,5 +13,14 @@ class ProjectParticipant(db.Model):
     project = db.relationship("Project", back_populates="participants")
     participant = db.relationship("Participant", back_populates="projects")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'project_id': self.project_id,
+            'participant_id': self.participant_id,
+            'role_on_project': self.role_on_project,
+            'skill_role': self.skill_role
+        }
+
     def __repr__(self):
         return f"<ProjectParticipant project_id={self.project_id}, participant_id={self.participant_id}, role={self.role_on_project}, skill={self.skill_role}>"

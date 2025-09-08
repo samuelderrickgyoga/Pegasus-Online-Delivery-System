@@ -1,67 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta     <!-- Main Content -->
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+        <!-- Header -->
+        <div class="mb-6 lg:mb-8">
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Participants</h1>
+            <p class="text-sm lg:text-base text-gray-600">Manage and view all participants</p>
+        </div>="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Participants - Capstone Project Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
+    <!-- Mobile Menu Button -->
+    <button onclick="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md">
+        <i class="fas fa-bars text-gray-600"></i>
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex flex-col">
-        <div class="flex items-center mb-10">
-            <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
-                <i class="fas fa-project-diagram text-white text-xl"></i>
+    <aside id="sidebar" class="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-40 w-64 bg-white shadow-lg border-r border-gray-100 p-4 lg:p-6 flex flex-col h-full">
+        <div class="flex items-center mb-6 lg:mb-10">
+            <div class="h-10 lg:h-12 w-10 lg:w-12 bg-blue-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-project-diagram text-white text-lg lg:text-xl"></i>
             </div>
-            <span class="ml-3 font-bold text-xl text-gray-900">Dashboard</span>
+            <span class="ml-3 font-bold text-lg lg:text-xl text-gray-900">Dashboard</span>
         </div>
-        <nav class="flex flex-col space-y-4">
-            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+        <nav class="flex flex-col space-y-2 lg:space-y-4">
+            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-home mr-3"></i> Home
             </a>
-            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-list mr-3"></i> Programs
             </a>
-            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-building mr-3"></i> Facilities
             </a>
-            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-tools mr-3"></i> Equipment
             </a>
-            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-cogs mr-3"></i> Projects
             </a>
-            <a href="#" class="flex items-center text-blue-600 font-semibold">
+            <a href="{{ url_for('main.participants') }}" class="flex items-center text-blue-600 font-semibold p-2 rounded bg-blue-50 text-sm lg:text-base">
                 <i class="fas fa-users mr-3"></i> Participants
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
                 <i class="fas fa-chart-line mr-3"></i> Outcomes
+            </a>
+            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
+                <i class="fas fa-wrench mr-3"></i> Services
             </a>
         </nav>
     </aside>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
     <!-- Main Content -->
     <main class="flex-1 p-8 overflow-y-auto">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Participants</h1>
-            <p class="text-gray-600">Details for Participant ID: {{ user_id }}</p>
+            <p class="text-gray-600">Manage and view all project participants</p>
         </div>
-        <!-- Participants Content -->
+        
+        <!-- Create Participant Form -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+            <div class="flex items-center mb-4">
+                <div class="p-3 bg-blue-100 rounded-lg">
+                    <i class="fas fa-plus text-blue-600 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Register New Participant</h3>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="full_name" class="block text-sm font-medium text-gray-700">Full Name *</label>
+                        <input type="text" id="full_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address *</label>
+                        <input type="email" id="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="affiliation" class="block text-sm font-medium text-gray-700">Affiliation *</label>
+                        <select id="affiliation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <option value="">Select Affiliation</option>
+                            <option value="CS">Computer Science</option>
+                            <option value="SE">Software Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="CE">Civil Engineering</option>
+                            <option value="BIS">Business Information Systems</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="institution" class="block text-sm font-medium text-gray-700">Institution *</label>
+                        <select id="institution" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <option value="">Select Institution</option>
+                            <option value="SCIT">SCIT</option>
+                            <option value="CEDAT">CEDAT</option>
+                            <option value="COBAMS">COBAMS</option>
+                            <option value="External">External</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="specialization" class="block text-sm font-medium text-gray-700">Specialization</label>
+                        <select id="specialization" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Specialization</option>
+                            <option value="Software">Software Development</option>
+                            <option value="Hardware">Hardware Design</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="AI/ML">AI/Machine Learning</option>
+                            <option value="IoT">Internet of Things</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="UI/UX">UI/UX Design</option>
+                            <option value="Business">Business Analysis</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="cross_skill_trained" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="cross_skill_trained" class="ml-2 block text-sm text-gray-900">Cross-skill Trained</label>
+                    </div>
+                </div>
+                <button id="create-participant" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Register Participant</button>
+            </div>
+        </div>
+        
+        <!-- Search and Filter Section -->
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
+            <div class="flex items-center mb-4">
+                <div class="p-3 bg-green-100 rounded-lg">
+                    <i class="fas fa-search text-green-600 text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Search & Filter Participants</h3>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input type="text" id="search-name" placeholder="Search by name..." class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <select id="filter-affiliation" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">All Affiliations</option>
+                    <option value="CS">Computer Science</option>
+                    <option value="SE">Software Engineering</option>
+                    <option value="EE">Electrical Engineering</option>
+                    <option value="ME">Mechanical Engineering</option>
+                    <option value="CE">Civil Engineering</option>
+                    <option value="BIS">Business Information Systems</option>
+                </select>
+                <select id="filter-institution" class="border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">All Institutions</option>
+                    <option value="SCIT">SCIT</option>
+                    <option value="CEDAT">CEDAT</option>
+                    <option value="COBAMS">COBAMS</option>
+                    <option value="External">External</option>
+                </select>
+                <button id="apply-filters" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Apply Filters</button>
+            </div>
+        </div>
+        
+        <!-- Participants List -->
         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
             <div class="flex items-center mb-4">
                 <div class="p-3 bg-blue-100 rounded-lg">
                     <i class="fas fa-users text-blue-600 text-xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Participant Details</h3>
-                    <p class="text-gray-500">User ID: {{ user_id }}</p>
+                    <h3 class="text-lg font-semibold text-gray-900">Participant Directory</h3>
+                    <p id="participants-count" class="text-gray-500">Loading...</p>
                 </div>
             </div>
-            <div class="text-sm text-gray-600">
-                <p>Participant information to be implemented.</p>
+            <div id="participants-list" class="text-sm text-gray-600">
+                <div class="grid gap-4" id="participant-items"></div>
+            </div>
+        </div>
+        
+        <!-- Project Assignment Modal (Simplified) -->
+        <div id="assignment-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Assign to Project</h3>
+                    <div class="space-y-3">
+                        <select id="modal-project" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Project</option>
+                        </select>
+                        <select id="modal-role" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Role</option>
+                            <option value="Student">Student</option>
+                            <option value="Lecturer">Lecturer</option>
+                            <option value="Contributor">Contributor</option>
+                            <option value="Supervisor">Supervisor</option>
+                        </select>
+                        <select id="modal-skill-role" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Skill Role</option>
+                            <option value="Developer">Developer</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Designer">Designer</option>
+                            <option value="Business Lead">Business Lead</option>
+                            <option value="Researcher">Researcher</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button onclick="closeAssignmentModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                        <button id="confirm-assignment" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Assign</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+    
+    <script>
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('translate-x-0')) {
+                // Close menu
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                // Open menu
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        let currentParticipantId = null;
+        let projects = [];
+        
+        // Fetch projects for assignment dropdown
+        async function fetchProjects() {
+            try {
+                const response = await fetch('/api/projects/');
+                projects = await response.json();
+                const projectSelect = document.getElementById('modal-project');
+                projectSelect.innerHTML = '<option value="">Select Project</option>';
+                projects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.title;
+                    projectSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
+        }
+        
+        // Fetch all participants
+        async function fetchParticipants(filters = {}) {
+            try {
+                let url = '/api/participants/';
+                if (Object.keys(filters).length > 0) {
+                    const params = new URLSearchParams(filters);
+                    url += '?' + params.toString();
+                }
+                
+                const response = await fetch(url);
+                const participants = await response.json();
+                const participantsList = document.getElementById('participant-items');
+                const participantsCount = document.getElementById('participants-count');
+                
+                if (response.ok) {
+                    participantsCount.textContent = `Total Participants: ${participants.length}`;
+                    participantsList.innerHTML = '';
+                    participants.forEach(participant => {
+                        const card = document.createElement('div');
+                        card.className = 'border rounded-lg p-4 bg-gray-50';
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-semibold text-gray-900">${participant.full_name}</h4>
+                                <div class="flex space-x-1">
+                                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">${participant.affiliation}</span>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">${participant.institution}</span>
+                                    ${participant.cross_skill_trained ? '<span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">Cross-skilled</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-600 mb-2">
+                                <p><i class="fas fa-envelope mr-1"></i>${participant.email}</p>
+                                ${participant.specialization ? `<p><i class="fas fa-cog mr-1"></i>${participant.specialization}</p>` : ''}
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <button onclick="viewProjects(${participant.id})" class="text-purple-600 hover:text-purple-800 text-xs">
+                                        <i class="fas fa-project-diagram mr-1"></i>Projects
+                                    </button>
+                                    <button onclick="assignToProject(${participant.id})" class="text-orange-600 hover:text-orange-800 text-xs">
+                                        <i class="fas fa-plus mr-1"></i>Assign
+                                    </button>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button onclick="editParticipant(${participant.id})" class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteParticipant(${participant.id})" class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        participantsList.appendChild(card);
+                    });
+                } else {
+                    participantsCount.textContent = 'Error loading participants';
+                    participantsList.innerHTML = `<p class="text-red-500">${participants.error}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('participants-count').textContent = 'Error loading participants';
+                document.getElementById('participant-items').innerHTML = `<p class="text-red-500">Failed to load participants: ${error.message}</p>`;
+            }
+        }
+
+        // Create new participant
+        document.getElementById('create-participant').addEventListener('click', async () => {
+            const participantData = {
+                full_name: document.getElementById('full_name').value,
+                email: document.getElementById('email').value,
+                affiliation: document.getElementById('affiliation').value,
+                institution: document.getElementById('institution').value,
+                specialization: document.getElementById('specialization').value,
+                cross_skill_trained: document.getElementById('cross_skill_trained').checked
+            };
+
+            if (!participantData.full_name || !participantData.email || !participantData.affiliation || !participantData.institution) {
+                alert('Please fill in all required fields (marked with *)');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/participants/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(participantData)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Participant registered successfully!');
+                    fetchParticipants();
+                    // Clear form
+                    document.getElementById('full_name').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('affiliation').value = '';
+                    document.getElementById('institution').value = '';
+                    document.getElementById('specialization').value = '';
+                    document.getElementById('cross_skill_trained').checked = false;
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to register participant: ${error.message}`);
+            }
+        });
+
+        // Apply filters
+        document.getElementById('apply-filters').addEventListener('click', () => {
+            const filters = {};
+            const name = document.getElementById('search-name').value;
+            const affiliation = document.getElementById('filter-affiliation').value;
+            const institution = document.getElementById('filter-institution').value;
+            
+            if (name) filters.name = name;
+            if (affiliation) filters.affiliation = affiliation;
+            if (institution) filters.institution = institution;
+            
+            fetchParticipants(filters);
+        });
+
+        // Edit participant
+        async function editParticipant(participantId) {
+            try {
+                const response = await fetch(`/api/participants/${participantId}`);
+                const participant = await response.json();
+                
+                if (response.ok) {
+                    const newData = {
+                        full_name: prompt('Enter full name:', participant.full_name),
+                        email: prompt('Enter email:', participant.email),
+                        specialization: prompt('Enter specialization:', participant.specialization || '')
+                    };
+
+                    // Remove null/undefined fields
+                    Object.keys(newData).forEach(key => {
+                        if (!newData[key]) delete newData[key];
+                    });
+
+                    if (Object.keys(newData).length > 0) {
+                        const updateResponse = await fetch(`/api/participants/${participantId}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(newData)
+                        });
+                        const result = await updateResponse.json();
+                        if (updateResponse.ok) {
+                            alert('Participant updated successfully!');
+                            fetchParticipants();
+                        } else {
+                            alert(`Error: ${result.error}`);
+                        }
+                    }
+                } else {
+                    alert(`Error fetching participant: ${participant.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to update participant: ${error.message}`);
+            }
+        }
+
+        // Delete participant
+        async function deleteParticipant(participantId) {
+            if (confirm('Are you sure you want to delete this participant? This will also remove them from all projects.')) {
+                try {
+                    const response = await fetch(`/api/participants/${participantId}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        alert('Participant deleted successfully!');
+                        fetchParticipants();
+                    } else {
+                        const result = await response.json();
+                        alert(`Error: ${result.error}`);
+                    }
+                } catch (error) {
+                    alert(`Failed to delete participant: ${error.message}`);
+                }
+            }
+        }
+
+        // View projects for a participant
+        async function viewProjects(participantId) {
+            try {
+                const response = await fetch(`/api/participants/${participantId}/projects`);
+                const participantProjects = await response.json();
+                if (response.ok) {
+                    if (participantProjects.length > 0) {
+                        const projectList = participantProjects.map(pp => `• ${pp.project.title} (${pp.role_on_project})`).join('\n');
+                        alert(`Projects for this participant:\n\n${projectList}`);
+                    } else {
+                        alert('This participant is not assigned to any projects.');
+                    }
+                } else {
+                    alert(`Error: ${participantProjects.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to load projects: ${error.message}`);
+            }
+        }
+
+        // Open assignment modal
+        function assignToProject(participantId) {
+            currentParticipantId = participantId;
+            document.getElementById('assignment-modal').classList.remove('hidden');
+        }
+
+        // Close assignment modal
+        function closeAssignmentModal() {
+            currentParticipantId = null;
+            document.getElementById('assignment-modal').classList.add('hidden');
+            document.getElementById('modal-project').value = '';
+            document.getElementById('modal-role').value = '';
+            document.getElementById('modal-skill-role').value = '';
+        }
+
+        // Confirm assignment
+        document.getElementById('confirm-assignment').addEventListener('click', async () => {
+            const projectId = document.getElementById('modal-project').value;
+            const role = document.getElementById('modal-role').value;
+            const skillRole = document.getElementById('modal-skill-role').value;
+
+            if (!projectId || !role) {
+                alert('Please select both project and role');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/project-participants/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        project_id: parseInt(projectId),
+                        participant_id: currentParticipantId,
+                        role_on_project: role,
+                        skill_role: skillRole
+                    })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Participant assigned to project successfully!');
+                    closeAssignmentModal();
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Failed to assign participant: ${error.message}`);
+            }
+        });
+
+        // Initial fetch
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchProjects();
+            await fetchParticipants();
+        });
+    </script>
 </body>
 </html>

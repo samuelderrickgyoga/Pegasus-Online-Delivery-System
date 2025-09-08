@@ -7,9 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 lg:flex">
+    <!-- Mobile Menu Button -->
+    <div class="lg:hidden bg-white shadow-sm border-b border-gray-100 p-4">
+        <button id="mobile-menu-btn" class="text-gray-600 hover:text-blue-600">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </div>
+    
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex flex-col">
+    <aside id="sidebar" class="hidden lg:flex w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex-col fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto">
         <div class="flex items-center mb-10">
             <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
                 <i class="fas fa-project-diagram text-white text-xl"></i>
@@ -32,74 +39,99 @@
             <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-cogs mr-3"></i> Projects
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.participants') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-users mr-3"></i> Participants
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-chart-line mr-3"></i> Outcomes
+            </a>
+            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+                <i class="fas fa-wrench mr-3"></i> Services
             </a>
         </nav>
     </aside>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
+    
     <!-- Main Content -->
-    <main class="flex-1 p-8 overflow-y-auto">
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Programs</h1>
-            <p class="text-gray-600">Manage and view all programs</p>
+        <div class="mb-6 lg:mb-8">
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Programs</h1>
+            <p class="text-sm lg:text-base text-gray-600">Manage and view all programs</p>
         </div>
         <!-- Create Program Form -->
-        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
-            <div class="flex items-center mb-4">
-                <div class="p-3 bg-blue-100 rounded-lg">
-                    <i class="fas fa-plus text-blue-600 text-xl"></i>
+        <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100 mb-4 lg:mb-6">
+            <div class="flex items-center mb-3 lg:mb-4">
+                <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                    <i class="fas fa-plus text-blue-600 text-lg lg:text-xl"></i>
                 </div>
-                <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Create New Program</h3>
+                <div class="ml-3 lg:ml-4">
+                    <h3 class="text-base lg:text-lg font-semibold text-gray-900">Create New Program</h3>
                 </div>
             </div>
-            <div class="text-sm text-gray-600">
-                <div class="space-y-4">
+            <div class="text-xs lg:text-sm text-gray-600">
+                <div class="space-y-3 lg:space-y-4">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" id="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <label for="name" class="block text-xs lg:text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-xs lg:text-sm">
                     </div>
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea id="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows="4"></textarea>
+                        <label for="description" class="block text-xs lg:text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-xs lg:text-sm" rows="3"></textarea>
                     </div>
                     <div>
-                        <label for="national_alignment" class="block text-sm font-medium text-gray-700">National Alignment</label>
-                        <input type="text" id="national_alignment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <label for="national_alignment" class="block text-xs lg:text-sm font-medium text-gray-700">National Alignment</label>
+                        <input type="text" id="national_alignment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-xs lg:text-sm">
                     </div>
                     <div>
-                        <label for="focus_areas" class="block text-sm font-medium text-gray-700">Focus Areas</label>
-                        <input type="text" id="focus_areas" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <label for="focus_areas" class="block text-xs lg:text-sm font-medium text-gray-700">Focus Areas</label>
+                        <input type="text" id="focus_areas" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-xs lg:text-sm">
                     </div>
                     <div>
-                        <label for="phases" class="block text-sm font-medium text-gray-700">Phases</label>
-                        <input type="text" id="phases" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <label for="phases" class="block text-xs lg:text-sm font-medium text-gray-700">Phases</label>
+                        <input type="text" id="phases" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-xs lg:text-sm">
                     </div>
-                    <button id="create-program" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create Program</button>
+                    <button id="create-program" class="w-full lg:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-xs lg:text-sm">Create Program</button>
                 </div>
             </div>
         </div>
         <!-- Programs List -->
-        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-            <div class="flex items-center mb-4">
-                <div class="p-3 bg-blue-100 rounded-lg">
-                    <i class="fas fa-folder-open text-blue-600 text-xl"></i>
+        <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
+            <div class="flex items-center mb-3 lg:mb-4">
+                <div class="p-2 lg:p-3 bg-blue-100 rounded-lg">
+                    <i class="fas fa-folder-open text-blue-600 text-lg lg:text-xl"></i>
                 </div>
-                <div class="ml-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Program List</h3>
-                    <p id="programs-count" class="text-gray-500">Loading...</p>
+                <div class="ml-3 lg:ml-4">
+                    <h3 class="text-base lg:text-lg font-semibold text-gray-900">Program List</h3>
+                    <p id="programs-count" class="text-xs lg:text-sm text-gray-500">Loading...</p>
                 </div>
             </div>
-            <div id="programs-list" class="text-sm text-gray-600">
+            <div id="programs-list" class="text-xs lg:text-sm text-gray-600">
                 <ul class="space-y-2" id="program-items"></ul>
             </div>
         </div>
     </main>
     <script>
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (sidebar.classList.contains('translate-x-0')) {
+                // Close menu
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                // Open menu
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.add('translate-x-0');
+                overlay.classList.remove('hidden');
+            }
+        }
+
         // Fetch all programs on page load
         async function fetchPrograms() {
             try {
@@ -113,27 +145,33 @@
                     programList.innerHTML = '';
                     programs.forEach(program => {
                         const li = document.createElement('li');
-                        li.className = 'flex items-center justify-between';
+                        li.className = 'p-3 lg:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors';
                         li.innerHTML = `
-                            <a href="/api/programs/${program.id}" class="text-blue-600 hover:underline">${program.name}</a>
-                            <div>
-                                <button onclick="editProgram(${program.id})" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteProgram(${program.id})" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                            <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start space-y-2 lg:space-y-0">
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-gray-900 text-sm lg:text-base">${program.name}</h4>
+                                    <p class="text-gray-600 mt-1 text-xs lg:text-sm">${program.description || 'No description provided'}</p>
+                                    <div class="mt-2 space-y-1">
+                                        <p class="text-xs text-gray-500"><strong>Alignment:</strong> ${program.national_alignment || 'Not specified'}</p>
+                                        <p class="text-xs text-gray-500"><strong>Focus Areas:</strong> ${program.focus_areas || 'Not specified'}</p>
+                                        <p class="text-xs text-gray-500"><strong>Phases:</strong> ${program.phases || 'Not specified'}</p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2 lg:ml-4 flex-shrink-0">
+                                    <button onclick="editProgram(${program.id})" class="px-2 lg:px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs">Edit</button>
+                                    <button onclick="deleteProgram(${program.id})" class="px-2 lg:px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs">Delete</button>
+                                </div>
                             </div>
                         `;
                         programList.appendChild(li);
                     });
                 } else {
                     programCount.textContent = 'Error loading programs';
-                    programList.innerHTML = `<p>${programs.error}</p>`;
+                    programList.innerHTML = `<p class="text-xs lg:text-sm">${programs.error}</p>`;
                 }
             } catch (error) {
                 document.getElementById('programs-count').textContent = 'Error loading programs';
-                document.getElementById('program-items').innerHTML = `<p>Failed to load programs: ${error.message}</p>`;
+                document.getElementById('program-items').innerHTML = `<p class="text-xs lg:text-sm">Failed to load programs: ${error.message}</p>`;
             }
         }
 

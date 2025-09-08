@@ -20,8 +20,12 @@ def equipment():
 def facilities():
     return render_template('facilities.html')
 
+@main_bp.route('/participants')
+def participants():
+    return render_template('participants.html')
+
 @main_bp.route('/participants/<int:user_id>')
-def participants(user_id):
+def participant_detail(user_id):
     return render_template('participants.html', user_id=user_id)
 
 @main_bp.route('/participants/<int:user_id>', methods=['PUT'])
@@ -29,6 +33,13 @@ def update_participants(user_id):
     # TO BE IMPLEMENTED 
     return render_template('participants.html', user_id=user_id)
 
+@main_bp.route('/outcomes')
+def outcomes():
+    return render_template('outcomes.html')
+
+@main_bp.route('/services')
+def services():
+    return render_template('services.html')
 
 @main_bp.route('/programs')
 def programs():

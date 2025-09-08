@@ -17,5 +17,17 @@ class Equipment(db.Model):
     # Relationships
     facility = db.relationship("Facility", back_populates="equipment")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'facility_id': self.facility_id,
+            'name': self.name,
+            'capabilities': self.capabilities,
+            'description': self.description,
+            'inventory_code': self.inventory_code,
+            'usage_domain': self.usage_domain,
+            'support_phase': self.support_phase
+        }
+
     def __repr__(self):
         return f"<Equipment {self.name}>"

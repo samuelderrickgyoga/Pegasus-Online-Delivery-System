@@ -43,7 +43,7 @@ class ProjectController:
         """Create new project"""
         try:
             # Validate required fields
-            required_fields = ['program_id', 'facility_id', 'title', 'nature_of_project']
+            required_fields = ['program_id', 'facility_id', 'title', 'nature']
             for field in required_fields:
                 if field not in data or not data[field]:
                     return jsonify({'error': f'Missing required field: {field}'}), 400
@@ -61,7 +61,7 @@ class ProjectController:
                 program_id=data['program_id'],
                 facility_id=data['facility_id'],
                 title=data['title'],
-                nature_of_project=data['nature_of_project'],
+                nature=data['nature'],
                 description=data.get('description'),
                 innovation_focus=data.get('innovation_focus'),
                 prototype_stage=data.get('prototype_stage'),
@@ -95,7 +95,7 @@ class ProjectController:
                 if not facility:
                     return jsonify({'error': 'Invalid facility_id'}), 400
             
-            updatable_fields = ['program_id', 'facility_id', 'title', 'nature_of_project',
+            updatable_fields = ['program_id', 'facility_id', 'title', 'nature',
                               'description', 'innovation_focus', 'prototype_stage',
                               'testing_requirements', 'commercialization_plan']
             for field in updatable_fields:

@@ -20,5 +20,19 @@ class Project(db.Model):
     participants = db.relationship("ProjectParticipant", back_populates="project")
     outcomes = db.relationship("Outcome", back_populates="project")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'program_id': self.program_id,
+            'facility_id': self.facility_id,
+            'title': self.title,
+            'nature': self.nature,
+            'description': self.description,
+            'innovation_focus': self.innovation_focus,
+            'prototype_stage': self.prototype_stage,
+            'testing_requirements': self.testing_requirements,
+            'commercialization_plan': self.commercialization_plan
+        }
+
     def __repr__(self):
         return f"<Project {self.title}>"
