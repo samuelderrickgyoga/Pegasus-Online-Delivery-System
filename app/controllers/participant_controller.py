@@ -2,7 +2,7 @@ from flask import jsonify
 from app.models.participant import Participant
 from app.models.project import Project
 from app.models.project_participant import ProjectParticipant
-from app.database import db
+from app import db
 
 class ParticipantController:
     

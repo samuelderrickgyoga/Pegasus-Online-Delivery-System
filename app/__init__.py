@@ -1,16 +1,16 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
-
+from flask_migrate import Migrate
 db = SQLAlchemy()
-
+migrate = Migrate()
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ods.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///progs.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'we try again tomorrow'
 
     db.init_app(app)
-
+    migrate.init_app(app, db)
 
     from app.routes.main import main_bp
     from app.routes.programs import programs_bp

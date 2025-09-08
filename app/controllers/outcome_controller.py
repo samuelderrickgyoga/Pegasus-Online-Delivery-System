@@ -1,7 +1,7 @@
 from flask import jsonify
 from app.models.outcome import Outcome
 from app.models.project import Project
-from app.database import db
+from app import db
 import os
 
 class OutcomeController:

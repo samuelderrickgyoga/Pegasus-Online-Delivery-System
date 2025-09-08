@@ -3,7 +3,7 @@ from app.models.facility import Facility
 from app.models.service import Service
 from app.models.equipment import Equipment
 from app.models.project import Project
-from app.database import db
+from app import db
 
 class FacilityController:
     

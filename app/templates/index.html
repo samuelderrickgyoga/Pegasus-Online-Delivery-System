@@ -8,7 +8,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
-
     <!-- Sidebar -->
     <aside class="w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex flex-col">
         <div class="flex items-center mb-10">
@@ -17,19 +16,21 @@
             </div>
             <span class="ml-3 font-bold text-xl text-gray-900">Dashboard</span>
         </div>
-
         <nav class="flex flex-col space-y-4">
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.index') }}" class="flex items-center text-blue-600 font-semibold">
+                <i class="fas fa-home mr-3"></i> Home
+            </a>
+            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-list mr-3"></i> Programs
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-building mr-3"></i> Facilities
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-tools mr-3"></i> Services
+            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+                <i class="fas fa-tools mr-3"></i> Equipment
             </a>
-            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-cogs mr-3"></i> Equipment
+            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
+                <i class="fas fa-cogs mr-3"></i> Projects
             </a>
             <a href="#" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
                 <i class="fas fa-users mr-3"></i> Participants
@@ -39,18 +40,16 @@
             </a>
         </nav>
     </aside>
-
     <!-- Main Content -->
     <main class="flex-1 p-8 overflow-y-auto">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Capstone Project Dashboard</h1>
-            <p class="text-gray-600">Overview of Programs, Facilities, Services, Equipment, Projects, Participants, and Outcomes</p>
+            <p class="text-gray-600">Overview of Programs, Facilities, Equipment, Projects, Participants, and Outcomes</p>
         </div>
-
         <!-- Dashboard Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Example Card -->
+            <!-- Programs Card -->
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <div class="flex items-center mb-4">
                     <div class="p-3 bg-blue-100 rounded-lg">
@@ -61,11 +60,127 @@
                         <p id="programs-count" class="text-gray-500">Loading...</p>
                     </div>
                 </div>
-                <div id="programs-list" class="text-sm text-gray-600"></div>
+                <div id="programs-list" class="text-sm text-gray-600">
+                    <p>Program details to be loaded.</p>
+                </div>
             </div>
-            <!-- Repeat similar cards for Facilities, Services, etc. -->
+            <!-- Facilities Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-building text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Facilities</h3>
+                        <p id="facilities-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="facilities-list" class="text-sm text-gray-600">
+                    <p>Facility details to be loaded.</p>
+                </div>
+            </div>
+            <!-- Equipment Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-tools text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Equipment</h3>
+                        <p id="equipment-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="equipment-list" class="text-sm text-gray-600">
+                    <p>Equipment details to be loaded.</p>
+                </div>
+            </div>
+            <!-- Projects Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-cogs text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Projects</h3>
+                        <p id="projects-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="projects-list" class="text-sm text-gray-600">
+                    <p>Project details to be loaded.</p>
+                </div>
+            </div>
+            <!-- Participants Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-users text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Participants</h3>
+                        <p id="participants-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="participants-list" class="text-sm text-gray-600">
+                    <p>Participant details to be loaded.</p>
+                </div>
+            </div>
+            <!-- Outcomes Card -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Outcomes</h3>
+                        <p id="outcomes-count" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div id="outcomes-list" class="text-sm text-gray-600">
+                    <p>Outcome details to be loaded.</p>
+                </div>
+            </div>
         </div>
     </main>
-
 </body>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Fetch programs from Flask API
+        const response = await fetch("/api/programs/");
+        if (!response.ok) throw new Error("Failed to fetch programs");
+
+        const programs = await response.json();
+
+        // Update count
+        document.getElementById("programs-count").textContent = `${programs.length} Programs`;
+
+        // Update list
+        const listContainer = document.getElementById("programs-list");
+        listContainer.innerHTML = "";
+
+        if (programs.length > 0) {
+            const ul = document.createElement("ul");
+            ul.classList.add("space-y-1");
+
+            programs.forEach(prog => {
+                const li = document.createElement("li");
+                li.textContent = prog.name; // assuming your Program model has "name"
+                li.classList.add("text-gray-700", "font-medium");
+                ul.appendChild(li);
+            });
+
+            listContainer.appendChild(ul);
+        } else {
+            listContainer.innerHTML = "<p class='text-gray-500'>No programs available.</p>";
+        }
+    } catch (error) {
+        console.error("Error loading programs:", error);
+        document.getElementById("programs-count").textContent = "Error";
+        document.getElementById("programs-list").innerHTML = "<p class='text-red-500'>Failed to load programs.</p>";
+    }
+});
+</script>
+
+
 </html>

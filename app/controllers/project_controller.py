@@ -5,7 +5,7 @@ from app.models.facility import Facility
 from app.models.participant import Participant
 from app.models.project_participant import ProjectParticipant
 from app.models.outcome import Outcome
-from app.database import db
+from app import db
 
 class ProjectController:
     

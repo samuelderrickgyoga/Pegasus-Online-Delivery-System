@@ -1,7 +1,7 @@
 from flask import jsonify
 from app.models.program import Program
 from app.models.project import Project
-from app.database import db
+from app import db
 
 class ProgramController:
     
