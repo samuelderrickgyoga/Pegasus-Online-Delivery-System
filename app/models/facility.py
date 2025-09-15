@@ -9,7 +9,7 @@ class Facility(db.Model):
     name = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=True)
     description = db.Column(db.Text, nullable=True)
-    partner_org = db.Column(db.String(255), nullable=True)  
+    partner_org = db.Column(db.String(255), nullable=True)
     facility_type = db.Column(db.String(100), nullable=True) 
     capabilities = db.Column(db.String(255), nullable=True)  
 
@@ -24,7 +24,7 @@ class Facility(db.Model):
             'name': self.name,
             'location': self.location,
             'description': self.description,
-            'partner_org': self.partner_org,
+            'partner_organization': self.partner_org,
             'facility_type': self.facility_type,
             'capabilities': self.capabilities
         }

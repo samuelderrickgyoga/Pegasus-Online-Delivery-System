@@ -16,7 +16,7 @@ class FacilityController:
                 if 'type' in filters:
                     query = query.filter(Facility.facility_type == filters['type'])
                 if 'partner' in filters:
-                    query = query.filter(Facility.partner_organization.ilike(f"%{filters['partner']}%"))
+                    query = query.filter(Facility.partner_org.ilike(f"%{filters['partner']}%"))
                 if 'location' in filters:
                     query = query.filter(Facility.location.ilike(f"%{filters['location']}%"))
                 if 'capability' in filters:
@@ -68,7 +68,7 @@ class FacilityController:
                 name=data['name'],
                 location=data['location'],
                 description=data.get('description'),
-                partner_organization=data.get('partner_organization'),
+                partner_org=data.get('partner_organization'),
                 facility_type=data['facility_type'],
                 capabilities=data.get('capabilities')
             )
@@ -88,11 +88,15 @@ class FacilityController:
             if not facility:
                 return jsonify({'error': 'Facility not found'}), 404
             
-            updatable_fields = ['name', 'location', 'description', 'partner_organization', 
+            field_mapping = {
+                'partner_organization': 'partner_org'
+            }
+            updatable_fields = ['name', 'location', 'description', 'partner_organization',
                               'facility_type', 'capabilities']
             for field in updatable_fields:
                 if field in data:
-                    setattr(facility, field, data[field])
+                    attr = field_mapping.get(field, field)
+                    setattr(facility, attr, data[field])
             
             db.session.commit()
             return jsonify(facility.to_dict()), 200
