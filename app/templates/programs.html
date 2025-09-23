@@ -1,61 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programs - Capstone Project Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 lg:flex">
-    <!-- Mobile Menu Button -->
-    <div class="lg:hidden bg-white shadow-sm border-b border-gray-100 p-4">
-        <button id="mobile-menu-btn" class="text-gray-600 hover:text-blue-600">
-            <i class="fas fa-bars text-xl"></i>
-        </button>
-    </div>
-    
-    <!-- Sidebar -->
-    <aside id="sidebar" class="hidden lg:flex w-64 bg-white shadow-lg border-r border-gray-100 p-6 flex-col fixed lg:relative inset-y-0 left-0 z-50 lg:z-auto">
-        <div class="flex items-center mb-10">
-            <div class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center">
-                <i class="fas fa-project-diagram text-white text-xl"></i>
-            </div>
-            <span class="ml-3 font-bold text-xl text-gray-900">Dashboard</span>
-        </div>
-        <nav class="flex flex-col space-y-4">
-            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-home mr-3"></i> Home
-            </a>
-            <a href="{{ url_for('main.programs') }}" class="flex items-center text-blue-600 font-semibold">
-                <i class="fas fa-list mr-3"></i> Programs
-            </a>
-            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-building mr-3"></i> Facilities
-            </a>
-            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-tools mr-3"></i> Equipment
-            </a>
-            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-cogs mr-3"></i> Projects
-            </a>
-            <a href="{{ url_for('main.participants') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-users mr-3"></i> Participants
-            </a>
-            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-chart-line mr-3"></i> Outcomes
-            </a>
-            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200">
-                <i class="fas fa-wrench mr-3"></i> Services
-            </a>
-        </nav>
-    </aside>
-    
-    <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
-    
-    <!-- Main Content -->
-    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+{% extends "base.html" %}
+
+{% block title %}Capstone Project Dashboard{% endblock %}
+
+{% block content %}
         <!-- Header -->
         <div class="mb-6 lg:mb-8">
             <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Programs</h1>
@@ -112,7 +59,9 @@
                 <ul class="space-y-2" id="program-items"></ul>
             </div>
         </div>
-    </main>
+
+{% endblock %}
+{% block scripts %}
     <script>
         // Mobile menu functionality
         function toggleMobileMenu() {
@@ -265,5 +214,5 @@
         // Initial fetch
         fetchPrograms();
     </script>
-</body>
-</html>
+
+{% endblock %}
