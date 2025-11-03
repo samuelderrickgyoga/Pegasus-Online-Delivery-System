@@ -151,7 +151,62 @@
             </div>
         </div>
     </main>
-    
+
+    <!-- Edit Facility Modal -->
+    <div id="edit-facility-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Edit Facility</h3>
+                    <button onclick="closeFacilityEditModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-facility-name" class="block text-sm font-medium text-gray-700">Facility Name</label>
+                            <input type="text" id="edit-facility-name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="edit-facility-location" class="block text-sm font-medium text-gray-700">Location</label>
+                            <input type="text" id="edit-facility-location" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-facility-facility_type" class="block text-sm font-medium text-gray-700">Facility Type</label>
+                            <select id="edit-facility-facility_type" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option value="">Select Type</option>
+                                <option value="Lab">Lab</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Office">Office</option>
+                                <option value="Testing Center">Testing Center</option>
+                                <option value="Research Center">Research Center</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="edit-facility-partner_org" class="block text-sm font-medium text-gray-700">Partner Organization</label>
+                            <input type="text" id="edit-facility-partner_org" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="edit-facility-description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="edit-facility-description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label for="edit-facility-capabilities" class="block text-sm font-medium text-gray-700">Capabilities</label>
+                        <input type="text" id="edit-facility-capabilities" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="e.g., CNC Machines, 3D Printing, PCB Design">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeFacilityEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                    <button onclick="saveFacilityEdit()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Fetch all facilities on page load
         async function fetchFacilities(filters = {}) {
@@ -272,46 +327,78 @@
             fetchFacilities(filters);
         });
 
-        // Edit a facility
+        // Edit a facility (modal-based)
         async function editFacility(facilityId) {
             try {
                 const response = await fetch(`/api/facilities/${facilityId}`);
                 const facility = await response.json();
-                
+
                 if (response.ok) {
-                    const newData = {
-                        name: prompt('Enter facility name:', facility.name),
-                        location: prompt('Enter location:', facility.location),
-                        description: prompt('Enter description:', facility.description || ''),
-                        partner_org: prompt('Enter partner organization:', facility.partner_org || ''),
-                        capabilities: prompt('Enter capabilities:', facility.capabilities || '')
-                    };
+                    // Populate modal fields
+                    document.getElementById('edit-facility-name').value = facility.name || '';
+                    document.getElementById('edit-facility-location').value = facility.location || '';
+                    document.getElementById('edit-facility-facility_type').value = facility.facility_type || '';
+                    document.getElementById('edit-facility-partner_org').value = facility.partner_org || '';
+                    document.getElementById('edit-facility-description').value = facility.description || '';
+                    document.getElementById('edit-facility-capabilities').value = facility.capabilities || '';
 
-                    // Remove null/undefined fields
-                    Object.keys(newData).forEach(key => {
-                        if (!newData[key]) delete newData[key];
-                    });
+                    // Store facility ID for save
+                    document.getElementById('edit-facility-modal').dataset.facilityId = facilityId;
 
-                    if (Object.keys(newData).length > 0) {
-                        const updateResponse = await fetch(`/api/facilities/${facilityId}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(newData)
-                        });
-                        const result = await updateResponse.json();
-                        if (updateResponse.ok) {
-                            alert('Facility updated successfully!');
-                            fetchFacilities();
-                        } else {
-                            alert(`Error: ${result.error}`);
-                        }
-                    }
+                    // Show modal
+                    document.getElementById('edit-facility-modal').classList.remove('hidden');
                 } else {
                     alert(`Error fetching facility: ${facility.error}`);
                 }
             } catch (error) {
+                alert(`Failed to load facility: ${error.message}`);
+            }
+        }
+
+        // Save facility edit
+        async function saveFacilityEdit() {
+            const facilityId = document.getElementById('edit-facility-modal').dataset.facilityId;
+            const facilityData = {
+                name: document.getElementById('edit-facility-name').value.trim(),
+                location: document.getElementById('edit-facility-location').value.trim(),
+                facility_type: document.getElementById('edit-facility-facility_type').value.trim(),
+                partner_org: document.getElementById('edit-facility-partner_org').value.trim(),
+                description: document.getElementById('edit-facility-description').value.trim(),
+                capabilities: document.getElementById('edit-facility-capabilities').value.trim()
+            };
+
+            // Remove empty fields for partial update
+            Object.keys(facilityData).forEach(key => {
+                if (!facilityData[key]) delete facilityData[key];
+            });
+
+            if (Object.keys(facilityData).length === 0) {
+                alert('Please fill at least one field to update.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/facilities/${facilityId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(facilityData)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Facility updated successfully!');
+                    closeFacilityEditModal();
+                    fetchFacilities();
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
                 alert(`Failed to update facility: ${error.message}`);
             }
+        }
+
+        // Close facility edit modal
+        function closeFacilityEditModal() {
+            document.getElementById('edit-facility-modal').classList.add('hidden');
         }
 
         // Delete a facility
