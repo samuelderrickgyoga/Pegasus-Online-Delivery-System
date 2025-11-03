@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 lg:flex">
+
+    <!-- Sidebar & Mobile Menu -->
+    {% include 'partials/sidebar.html' %}
+
+    <!-- Main content -->
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+        {% block content %}
+        <!-- Each page will inject its own content here -->
+        {% endblock %}
+    </main>
+
+    <!-- Optional scripts -->
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

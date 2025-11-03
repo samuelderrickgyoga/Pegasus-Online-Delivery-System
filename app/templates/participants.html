@@ -1,58 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Participants - Capstone Project Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
-    <!-- Mobile Menu Button -->
-    <button onclick="toggleMobileMenu()" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md">
-        <i class="fas fa-bars text-gray-600"></i>
-    </button>
+{% extends "base.html" %}
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed lg:relative lg:translate-x-0 -translate-x-full transition-transform duration-300 ease-in-out z-40 w-64 bg-white shadow-lg border-r border-gray-100 p-4 lg:p-6 flex flex-col h-full">
-        <div class="flex items-center mb-6 lg:mb-10">
-            <div class="h-10 lg:h-12 w-10 lg:w-12 bg-blue-600 rounded-full flex items-center justify-center">
-                <i class="fas fa-project-diagram text-white text-lg lg:text-xl"></i>
-            </div>
-            <span class="ml-3 font-bold text-lg lg:text-xl text-gray-900">Dashboard</span>
-        </div>
-        <nav class="flex flex-col space-y-2 lg:space-y-4">
-            <a href="{{ url_for('main.index') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-home mr-3"></i> Home
-            </a>
-            <a href="{{ url_for('main.programs') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-list mr-3"></i> Programs
-            </a>
-            <a href="{{ url_for('main.facilities') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-building mr-3"></i> Facilities
-            </a>
-            <a href="{{ url_for('main.equipment') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-tools mr-3"></i> Equipment
-            </a>
-            <a href="{{ url_for('main.projects') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-cogs mr-3"></i> Projects
-            </a>
-            <a href="{{ url_for('main.participants') }}" class="flex items-center text-blue-600 font-semibold p-2 rounded bg-blue-50 text-sm lg:text-base">
-                <i class="fas fa-users mr-3"></i> Participants
-            </a>
-            <a href="{{ url_for('main.outcomes') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-chart-line mr-3"></i> Outcomes
-            </a>
-            <a href="{{ url_for('main.services') }}" class="flex items-center text-gray-700 hover:text-blue-600 transition duration-200 p-2 rounded text-sm lg:text-base">
-                <i class="fas fa-wrench mr-3"></i> Services
-            </a>
-        </nav>
-    </aside>
-    
-    <!-- Mobile Overlay -->
-    <div id="mobile-overlay" class="hidden lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleMobileMenu()"></div>
-    <!-- Main Content -->
-    <main class="flex-1 p-8 overflow-y-auto">
+{% block title %}Capstone Project Dashboard{% endblock %}
+
+{% block content %}
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2">Participants</h1>
@@ -208,6 +158,7 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
 
         <!-- Edit Participant Modal -->
         <div id="edit-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
@@ -273,6 +224,10 @@
         </div>
     </main>
     
+=======
+{% endblock %}    
+
+>>>>>>> 2b321e54250f3c175760e3b86b3ccfe2a01b601c
     <script>
         // Mobile menu functionality
         function toggleMobileMenu() {
