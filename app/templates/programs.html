@@ -8,6 +8,7 @@
             <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Programs</h1>
             <p class="text-sm lg:text-base text-gray-600">Manage and view all programs</p>
         </div>
+
         <!-- Create Program Form -->
         <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100 mb-4 lg:mb-6">
             <div class="flex items-center mb-3 lg:mb-4">
@@ -44,6 +45,7 @@
                 </div>
             </div>
         </div>
+
         <!-- Programs List -->
         <div class="bg-white p-4 lg:p-6 rounded-xl shadow-lg border border-gray-100">
             <div class="flex items-center mb-3 lg:mb-4">
@@ -59,54 +61,49 @@
                 <ul class="space-y-2" id="program-items"></ul>
             </div>
         </div>
-<<<<<<< HEAD
-    </main>
 
-    <!-- Edit Program Modal -->
-    <div id="edit-program-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-medium text-gray-900">Edit Program</h3>
-                    <button onclick="closeProgramEditModal()" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label for="edit-program-name" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" id="edit-program-name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <!-- Edit Program Modal -->
+        <div id="edit-program-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Edit Program</h3>
+                        <button onclick="closeProgramEditModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
-                    <div>
-                        <label for="edit-program-description" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea id="edit-program-description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows="3"></textarea>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="edit-program-name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="edit-program-name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="edit-program-description" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="edit-program-description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <label for="edit-program-national_alignment" class="block text-sm font-medium text-gray-700">National Alignment</label>
+                            <input type="text" id="edit-program-national_alignment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="edit-program-focus_areas" class="block text-sm font-medium text-gray-700">Focus Areas</label>
+                            <input type="text" id="edit-program-focus_areas" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="edit-program-phases" class="block text-sm font-medium text-gray-700">Phases</label>
+                            <input type="text" id="edit-program-phases" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
                     </div>
-                    <div>
-                        <label for="edit-program-national_alignment" class="block text-sm font-medium text-gray-700">National Alignment</label>
-                        <input type="text" id="edit-program-national_alignment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button onclick="closeProgramEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                        <button onclick="saveProgramEdit()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Changes</button>
                     </div>
-                    <div>
-                        <label for="edit-program-focus_areas" class="block text-sm font-medium text-gray-700">Focus Areas</label>
-                        <input type="text" id="edit-program-focus_areas" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-program-phases" class="block text-sm font-medium text-gray-700">Phases</label>
-                        <input type="text" id="edit-program-phases" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    </div>
-                </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button onclick="closeProgramEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
-                    <button onclick="saveProgramEdit()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save Changes</button>
                 </div>
             </div>
         </div>
-    </div>
-
-=======
-
 {% endblock %}
+
 {% block scripts %}
->>>>>>> 2b321e54250f3c175760e3b86b3ccfe2a01b601c
     <script>
         // Mobile menu functionality
         function toggleMobileMenu() {
@@ -114,12 +111,10 @@
             const overlay = document.getElementById('mobile-overlay');
             
             if (sidebar.classList.contains('translate-x-0')) {
-                // Close menu
                 sidebar.classList.remove('translate-x-0');
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             } else {
-                // Open menu
                 sidebar.classList.remove('-translate-x-full');
                 sidebar.classList.add('translate-x-0');
                 overlay.classList.remove('hidden');
@@ -210,17 +205,13 @@
                 const program = await response.json();
 
                 if (response.ok) {
-                    // Populate modal fields
                     document.getElementById('edit-program-name').value = program.name || '';
                     document.getElementById('edit-program-description').value = program.description || '';
                     document.getElementById('edit-program-national_alignment').value = program.national_alignment || '';
                     document.getElementById('edit-program-focus_areas').value = program.focus_areas || '';
                     document.getElementById('edit-program-phases').value = program.phases || '';
 
-                    // Store program ID for save
                     document.getElementById('edit-program-modal').dataset.programId = programId;
-
-                    // Show modal
                     document.getElementById('edit-program-modal').classList.remove('hidden');
                 } else {
                     alert(`Error fetching program: ${program.error}`);
@@ -241,7 +232,6 @@
                 phases: document.getElementById('edit-program-phases').value.trim()
             };
 
-            // Remove empty fields for partial update
             Object.keys(programData).forEach(key => {
                 if (!programData[key]) delete programData[key];
             });
@@ -261,7 +251,7 @@
                 if (response.ok) {
                     alert('Program updated successfully!');
                     closeProgramEditModal();
-                    fetchPrograms(); // Refresh the list
+                    fetchPrograms();
                 } else {
                     alert(`Error: ${result.error}`);
                 }
@@ -279,12 +269,10 @@
         async function deleteProgram(programId) {
             if (confirm('Are you sure you want to delete this program?')) {
                 try {
-                    const response = await fetch(`/api/programs/${programId}`, {
-                        method: 'DELETE'
-                    });
+                    const response = await fetch(`/api/programs/${programId}`, { method: 'DELETE' });
                     if (response.ok) {
                         alert('Program deleted successfully!');
-                        fetchPrograms(); // Refresh the list
+                        fetchPrograms();
                     } else {
                         const result = await response.json();
                         alert(`Error: ${result.error}`);
@@ -298,5 +286,4 @@
         // Initial fetch
         fetchPrograms();
     </script>
-
 {% endblock %}
