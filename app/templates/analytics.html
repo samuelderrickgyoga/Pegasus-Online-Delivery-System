@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Analytics</h1>
+    <div class="text-sm text-gray-500">Interactive overview + Generated visual gallery</div>
+  </div>
+
+  <!-- Interactive Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Entity Distribution (Bar) -->
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-semibold text-gray-800 mb-3">Entity Distribution</h2>
+      <canvas id="entityChart" height="140"></canvas>
+    </div>
+
+    <!-- Outcome Commercialization (Pie) -->
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-semibold text-gray-800 mb-3">Outcome Commercialization</h2>
+      <canvas id="statusChart" height="140"></canvas>
+      {% if not status_labels or status_labels|length == 0 %}
+      <div class="text-xs text-gray-500 mt-2">No outcome commercialization data available.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Gallery of Generated Visuals -->
+  <div class="mt-8">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Generated Visuals</h2>
+    {% if image_files and image_files|length > 0 %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for img in image_files %}
+      <div class="bg-white rounded-xl shadow overflow-hidden">
+        <div class="p-3 border-b">
+          <div class="text-sm text-gray-700 font-medium truncate">{{ img }}</div>
+        </div>
+        <a href="{{ url_for('main.analytics_image', filename=img) }}" target="_blank" class="block">
+          <img src="{{ url_for('main.analytics_image', filename=img) }}" alt="{{ img }}" class="w-full object-cover">
+        </a>
+        <div class="p-3 text-right text-xs text-gray-500">Click to open full size</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="text-sm text-gray-500">No generated images found yet. Run the visualization script to create them.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    const entityLabels = {{ entity_labels|tojson }};
+    const entityValues = {{ entity_values|tojson }};
+    const statusLabels = {{ status_labels|tojson }};
+    const statusValues = {{ status_values|tojson }};
+
+    // Entity Bar Chart
+    new Chart(document.getElementById('entityChart'), {
+      type: 'bar',
+      data: {
+        labels: entityLabels,
+        datasets: [{
+          label: 'Count',
+          data: entityValues,
+          backgroundColor: ['#2563eb','#10b981','#f59e0b','#ef4444','#8b5cf6','#14b8a6','#f97316','#64748b']
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)'} } },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Outcome Status Pie Chart (only render if we have data)
+    if (statusLabels && statusLabels.length > 0) {
+      new Chart(document.getElementById('statusChart'), {
+        type: 'pie',
+        data: {
+          labels: statusLabels,
+          datasets: [{
+            data: statusValues,
+            backgroundColor: ['#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#14b8a6','#f97316','#64748b']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    // Mobile sidebar toggle hook if not already present
+    window.toggleMobileMenu = window.toggleMobileMenu || function() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('mobile-overlay');
+      if (sidebar && overlay) {
+        const isHidden = sidebar.classList.contains('hidden');
+        sidebar.classList.toggle('hidden', !isHidden ? true : false);
+        overlay.classList.toggle('hidden', !isHidden ? true : false);
+      }
+    };
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileMenu);
+  </script>
+{% endblock %}
