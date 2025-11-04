@@ -11,7 +11,7 @@
 
 ### 2. Visualization Engine
 **File**: `visualize_database.py`
-- Generates **8 visualization files**
+- Generates **8 visualizations**
 - Creates **comprehensive dashboard**
 - Produces **detailed text report**
 - Explains visualization choices
