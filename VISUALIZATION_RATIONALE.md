@@ -25,7 +25,7 @@ When choosing visualization techniques for the ODS system, we considered:
 - **Categorical Data** → Pie charts, Bar charts
 - **Continuous Numerical Data** → Histograms, Box plots
 - **Time Series Data** → Line charts, Area charts
-- **Hierarchical Data** → Tree maps, Sunburst charts
+- **Hierarchical Data** → Tree map, Sunburst charts
 - **Comparative Data** → Bar charts, Radar charts
 
 #### 1.2 Analytical Purpose
