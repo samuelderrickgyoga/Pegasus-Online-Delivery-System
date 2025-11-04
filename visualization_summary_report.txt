@@ -8,7 +8,7 @@ VISUALIZATION TECHNIQUES USED AND JUSTIFICATIONS
 ======================================================================
 
 1. PIE CHARTS
-   Purpose: Show proportional distribution (parts of a whole)
+   Purpose: Shows proportional distribution (parts of a whole)
    Best for: Categorical data with <10 categories
    Used for: Entity distribution, status distribution
    Advantage: Instantly shows which categories dominate
