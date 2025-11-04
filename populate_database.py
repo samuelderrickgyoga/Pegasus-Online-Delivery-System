@@ -157,7 +157,7 @@ def populate_equipment(count=48):
         ('Medical Equipment', 'Healthcare Kit', 'Health Services')
     ]
     
-    conditions = ['Excellent', 'Good', 'Fair', 'Needs Repair']
+    conditions = ['Excellent', 'Good', 'Fair', 'Need Repair']
     
     equipments = []
     
