@@ -7,7 +7,7 @@ This guide explains how to populate the ODS (Online Delivery System) database wi
 
 ### 1. `populate_database.py`
 Populates the database with 248 records distributed in the ratio **8:7:6:5:4:3:2:1** across all entities:
-- **Programs**: 64 records (8 × 8)
+- **Programs**: 64 record (8 × 8)
 - **Facilities**: 56 records (7 × 8)
 - **Equipment**: 48 records (6 × 8)
 - **Projects**: 40 records (5 × 8)
