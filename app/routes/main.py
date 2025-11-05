@@ -18,6 +18,29 @@ main_bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
+@main_bp.route('/debug')
+def debug():
+    """Debug page to check if API endpoints are accessible"""
+    from app.models.program import Program
+    from app.models.project import Project
+    from app.models.participant import Participant
+    from app.models.facility import Facility
+    
+    counts = {
+        'programs': Program.query.count(),
+        'facilities': Facility.query.count(),
+        'projects': Project.query.count(),
+        'participants': Participant.query.count()
+    }
+    
+    sample_data = {}
+    if counts['programs'] > 0:
+        sample_data['program'] = Program.query.first().to_dict()
+    if counts['projects'] > 0:
+        sample_data['project'] = Project.query.first().to_dict()
+    
+    return render_template('debug.html', counts=counts, sample_data=sample_data)
+
 @main_bp.route('/projects')
 def projects():
     return render_template('projects.html')
@@ -85,12 +108,45 @@ def analytics():
     image_paths = sorted(glob.glob(pattern))
     image_files = [os.path.basename(p) for p in image_paths]
 
+    # Projects prototype stage distribution
+    proto_counts = {}
+    try:
+        for p in Project.query.all():
+            key = (p.prototype_stage or 'Unknown')
+            proto_counts[key] = proto_counts.get(key, 0) + 1
+    except Exception:
+        proto_counts = {}
+
+    # Equipment usage domain distribution
+    dom_counts = {}
+    try:
+        for e in Equipment.query.all():
+            key = (e.usage_domain or 'Unknown')
+            dom_counts[key] = dom_counts.get(key, 0) + 1
+    except Exception:
+        dom_counts = {}
+
+    # Facility type distribution
+    type_counts = {}
+    try:
+        for f in Facility.query.all():
+            key = (f.facility_type or 'Unknown')
+            type_counts[key] = type_counts.get(key, 0) + 1
+    except Exception:
+        type_counts = {}
+
     return render_template(
         'analytics.html',
         entity_labels=list(entity_counts.keys()),
         entity_values=list(entity_counts.values()),
         status_labels=list(statuses.keys()),
         status_values=list(statuses.values()),
+        proto_labels=list(proto_counts.keys()),
+        proto_values=list(proto_counts.values()),
+        domain_labels=list(dom_counts.keys()),
+        domain_values=list(dom_counts.values()),
+        ftype_labels=list(type_counts.keys()),
+        ftype_values=list(type_counts.values()),
         image_files=image_files
     )
 
