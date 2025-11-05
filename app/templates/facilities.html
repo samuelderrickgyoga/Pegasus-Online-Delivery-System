@@ -100,7 +100,8 @@
             </div>
         </div>
 {% endblock %}
-    
+
+{% block scripts %}
     <script>
         // Fetch all facilities on page load
         async function fetchFacilities(filters = {}) {
@@ -356,7 +357,8 @@
         }
 
         // Initial fetch
-        fetchFacilities();
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchFacilities();
+        });
     </script>
-</body>
-</html>
+{% endblock %}
