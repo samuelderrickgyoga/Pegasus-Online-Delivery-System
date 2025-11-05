@@ -119,7 +119,8 @@
             </div>
         </div>
 {% endblock %}
-    
+
+{% block scripts %}
     <script>
         // Mobile menu functionality
         function toggleMobileMenu() {
@@ -347,5 +348,4 @@
             await fetchEquipment();
         });
     </script>
-</body>
-</html>
+{% endblock %}
